@@ -1,0 +1,8 @@
+#player-list, #player-info {
+	display: inline-block;
+	vertical-align: top;
+}
+
+#player-list {
+	width: 300px;
+}
