@@ -11,9 +11,8 @@ class TeamsController < ApplicationController
 	end
 
 	def show
-		team_info = Team.find(params[:id])
-		team_players = team_info.players
-		render :json => { team: team_info, players: team_players }
+		team_info = Team.find(params[:id])	
+		render :json => { team: team_info, players: team_info.players }
 	end
 
 	def destroy
