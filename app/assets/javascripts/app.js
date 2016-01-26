@@ -10,8 +10,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 			controller: "playersController"
 		})
 		.state('teams', {
-			url: "/partial2",
-			templateUrl: "partials/teams.html",
+			url: "/teams",
+			templateUrl: "partials/teams/index.html",
 			controller: "teamsController"
 		})
 		.state('players.show', {
@@ -19,11 +19,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 			templateUrl: 'partials/players/show.html',
 			controller: "playerShowController"
 		})
-
-
-
-
-
+		.state('teams.show', {
+			url: "/:id",
+			templateUrl: 'partials/teams/show.html',
+			controller: "teamShowController"
+		})
 }])
 
 // ------------------------------------- FACTORIES ------------------------------------- //
@@ -59,6 +59,11 @@ app.factory("teamFactory", function($http){
 			callback(output);
 		})
 	}
+	factory.show = function(id, callback){
+		$http.get('/teams/' + id).success(function(output){
+			callback(output);
+		})
+	}	
 	factory.create = function(teamInfo, callback){
 		$http.post("/teams", teamInfo).success(function(output){
 			callback(output);
@@ -73,7 +78,7 @@ app.factory("teamFactory", function($http){
 })
 
 // ------------------------------------- CONTROLLERS ------------------------------------- //
-app.controller("playersController", function($scope, playerFactory, teamFactory){
+app.controller("playersController", ['$scope', 'playerFactory', 'teamFactory', function($scope, playerFactory, teamFactory){
 	playerFactory.index(function(json){
 		$scope.players = json;
 	})
@@ -94,7 +99,7 @@ app.controller("playersController", function($scope, playerFactory, teamFactory)
 			$scope.players = json;
 		})
 	}
-})
+}])
 
 app.controller("playerShowController", ['$scope', '$stateParams', 'playerFactory', function($scope, $stateParams, playerFactory){
 	playerFactory.show($stateParams.id, function(json){
@@ -102,7 +107,7 @@ app.controller("playerShowController", ['$scope', '$stateParams', 'playerFactory
 	})
 }]);
  
-app.controller("teamsController", function($scope, teamFactory){
+app.controller("teamsController", ['$scope', 'teamFactory', function($scope, teamFactory){
 	teamFactory.index(function(json){
 		$scope.teams = json;
 	})
@@ -117,4 +122,10 @@ app.controller("teamsController", function($scope, teamFactory){
 			$scope.teams = json;
 		})
 	}
-})
+}])
+
+app.controller("teamShowController", ['$scope', '$stateParams', 'teamFactory', function($scope, $stateParams, teamFactory){
+	teamFactory.show($stateParams.id, function(json){
+		$scope.teamInfo = json;
+	})
+}]);

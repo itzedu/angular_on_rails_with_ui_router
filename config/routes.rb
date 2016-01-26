@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # --------------- teams routes --------------- #
   get "teams" => "teams#index"
   post "teams" => "teams#create"
+  get "teams/:id" => "teams#show"
   delete "teams/:id" => "teams#destroy"
 
 
